@@ -39,6 +39,9 @@ module Libreconv
       @target = target
       @soffice_command = soffice_command || which('soffice') || which('soffice.bin')
       @convert_to = convert_to || 'pdf'
+      if @convert_to == 'html'
+        @convert_to = "html:'HTML (StarWriter):EmbedImages'"
+      end
 
       ensure_soffice_exists
     end
