@@ -39,11 +39,6 @@ module Libreconv
       @target = target
       @soffice_command = soffice_command || which('soffice') || which('soffice.bin')
       @convert_to = convert_to || 'pdf'
-      if @convert_to == 'html'
-        @convert_to_params = "html:'HTML (StarWriter):EmbedImages'"
-      else
-        @convert_to_params = @convert_to
-      end
 
       ensure_soffice_exists
     end
@@ -97,7 +92,7 @@ module Libreconv
         "--accept=\"pipe,name=#{File.basename(tmp_pipe_path)};url;StarOffice.ServiceManager\"",
         "-env:UserInstallation=#{build_file_uri(tmp_pipe_path)}",
         '--headless',
-        '--convert-to', @convert_to_params,
+        '--convert-to', @convert_to,
         escaped_source,
         '--outdir', target_path
       ]
@@ -118,7 +113,7 @@ module Libreconv
 
     # @return [String]
     def target_filename
-      File.basename(escaped_source_path, '.*') + '.' + File.basename(@convert_to, ':*')
+      File.basename(escaped_source_path, '.*') + '.' + @convert_to.split(':').first
     end
 
     # @raise [IOError] If soffice headless command line tool not found.
