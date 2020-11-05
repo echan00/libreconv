@@ -54,8 +54,6 @@ module Libreconv
 
       Dir.mktmpdir do |target_path|
         command = build_command(tmp_pipe_path, target_path)
-        puts command
-        puts "----"
         target_tmp_file = execute_command(command, target_path)
 
         FileUtils.cp target_tmp_file, @target
@@ -82,7 +80,7 @@ module Libreconv
       return target_tmp_file if status.success? && File.exist?(target_tmp_file)
 
       raise ConversionFailedError,
-            "Conversion failed! Output: #{output.strip.inspect}, Error: #{error.strip.inspect}"
+            "Conversion failed! Output: #{output.strip.inspect}, Command: #{command.to_s}, Error: #{error.strip.inspect}"
     end
 
     # @return [Hash]
